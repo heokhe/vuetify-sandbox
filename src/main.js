@@ -14,7 +14,8 @@ Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
     theme: {
-        primary: colors.deepPurple.base
+        primary: colors.deepPurple.base,
+        secondary: colors.amber.accent2
     }
 })
 
