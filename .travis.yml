@@ -1,5 +1,7 @@
 language: node_js
-deploy: 
+node_js:
+  - "4"
+deploy:
   provider: pages
   skip-cleanup: true
   github-token: S8ep35oAUjCIYPBOosBifg
