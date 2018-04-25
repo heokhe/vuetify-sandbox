@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueMeta from 'vue-meta'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
@@ -13,14 +14,22 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
+    rtl : true,
     theme: {
-        primary: colors.deepPurple.base,
-        secondary: colors.amber.accent2
+        primary: colors.amber.darken1,
+        secondary: colors.blue.accent3,
+        accent: colors.lightBlue.accent1
     }
 })
+
+Vue.use(VueMeta)
 
 new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
+    metaInfo: {
+        title: 'home',
+        titleTemplate: '%s — Vuetify Sandbox'
+    }
 }).$mount('#app')
