@@ -14,9 +14,8 @@ export default new Router({
             component: Home
         },
         {
-            path: '/theme/:palette?',
-            component: ThemeGenerator,
-            props: true
+            path: '/theme/:themeName?',
+            component: ThemeGenerator
         }
     ]
 })

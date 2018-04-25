@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        dark: true
+        dark: false
     },
     mutations: {
         toggleDark(state){
@@ -16,8 +16,5 @@ export default new Vuex.Store({
         modeIcon(state){
             return state.dark ? 'brightness_3' : 'wb_sunny'
         }
-    },
-    actions: {
-
     }
 })
