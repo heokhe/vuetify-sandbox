@@ -1,5 +1,5 @@
 <template>
-    <div v-if='parameter'>
+    <div>
         <v-toolbar app absolute ref='toolbar' class="elevation-1">
             <v-btn flat icon to='/'>
                 <v-icon>arrow_back</v-icon>
@@ -53,31 +53,6 @@
             </v-container>
         </v-content>
     </div>
-    <div v-else>
-        <v-container style='height: 100vh' fill-height fluid class="pa-0 has-pattern" :class='{"accent": !$store.state.dark}'>
-            <v-layout align-center justify-center>
-                <v-card class="elevation-24 pa-3 my-1 mx-3" light>
-                    <v-card-title>
-                        <div class="title">
-                            Select a name for your new theme
-                        </div>
-                    </v-card-title>
-                    <div class="px-4">
-                        <v-text-field autofocus v-model='themeName' light color='secondary' hide-details placeholder='A cool name...'></v-text-field>
-                        <div class="text-xs-center mt-2">
-                            <v-btn @click.native='createTheme' dark>create theme</v-btn>
-                        </div>
-                        <div class="caption mt-2 text-xs-center">
-                            A theme name should contain at least 3 characters.
-                        </div>
-                    </div>
-                </v-card>
-            </v-layout>
-            <!-- <v-snackbar v-model='promptError.is'>
-                {{promptError.text}}
-            </v-snackbar> -->
-        </v-container>
-    </div>
 </template>
 
 <script>
@@ -98,13 +73,7 @@ export default {
     },
     data(){
         return {
-            promptError: {
-                is: false,
-                text: ''
-            },
-            themeName: '',
             theme: {
-                name: null,
                 colors: this.$vuetify.theme,
                 dark: false
             },
@@ -113,22 +82,11 @@ export default {
         }
     },
     methods: {
-        createTheme(){
-            // let n = this.themeName;
-            //
-            // if (n.trim().length > 2) {
-            // } else {
-            //     alert('err')
-            // }
-        },
         toggleDark(){
             this.theme.dark = !this.theme.dark
         }
     },
     computed: {
-        parameter(){
-            return this.$route.params.themeName
-        },
         isMobile(){
             return this.$vuetify.breakpoint.smAndDown
         },
