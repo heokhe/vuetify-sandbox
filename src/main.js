@@ -28,8 +28,14 @@ new Vue({
     router,
     store,
     render: h => h(App),
-    metaInfo: {
-        title: 'home',
-        titleTemplate: '%s — Vuetify Sandbox'
+    metaInfo: function() {
+        let _ = this;
+        return {
+            titleTemplate: t => `${t ? t + ' — ' : ''}Vuetify Sandbox`,
+            meta: [{
+                name: 'content-color',
+                content: _.$store.state.dark ? '#212121' : _.$vuetify.theme.primary
+            }]
+        }
     }
 }).$mount('#app')

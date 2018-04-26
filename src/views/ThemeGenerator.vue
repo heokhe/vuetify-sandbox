@@ -6,9 +6,6 @@
             </v-btn>
             <v-toolbar-title>Theme generator</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn flat icon @click='$store.commit("toggleDark")'>
-                <v-icon>{{$store.getters.modeIcon}}</v-icon>
-            </v-btn>
             <v-menu left>
                 <v-btn flat icon slot='activator'>
                     <v-icon>more_vert</v-icon>
@@ -20,6 +17,9 @@
                     <v-list-tile>
                         <v-list-tile-title>Reload theme</v-list-tile-title>
                     </v-list-tile>
+                    <v-list-tile @click='$store.commit("toggleDark")' color=''>
+                        <v-list-tile-title>Toggle Dark mode</v-list-tile-title>
+                    </v-list-tile>
                 </v-list>
             </v-menu>
             <v-btn v-if='isMobile' flat @click='showVariants = !showVariants' icon>
@@ -30,7 +30,7 @@
             <v-toolbar class="elevation-1" color="transparent">
                 <v-toolbar-title>Color variants</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn class="elevation-3" small color="primary">export</v-btn>
+                <v-btn flat small outline color='primary'>export</v-btn>
             </v-toolbar>
             <v-list two-line dense class="pa-0">
                 <variant-tile v-for='(hex, name) in theme.colors' :key='name' :hex='hex' :variant-name="name"></variant-tile>
@@ -60,7 +60,7 @@
                                 <v-btn icon flat>
                                     <v-icon>search</v-icon>
                                 </v-btn>
-                                <v-btn color="accent" fab bottom right absolute>
+                                <v-btn color="secondary" fab bottom right absolute>
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-toolbar>
