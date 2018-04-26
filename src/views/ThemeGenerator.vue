@@ -4,19 +4,34 @@
             <v-btn flat icon to='/'>
                 <v-icon>arrow_back</v-icon>
             </v-btn>
-            <v-toolbar-title>{{theme.name || ''}}</v-toolbar-title>
+            <v-toolbar-title>Theme generator</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn flat icon @click='$store.commit("toggleDark")'>
                 <v-icon>{{$store.getters.modeIcon}}</v-icon>
             </v-btn>
-            <v-tooltip bottom>
-                <v-btn flat @click='showVariants = !showVariants' icon :color='showVariants ? "primary" : ""' slot='activator'>
-                    <v-icon>menu</v-icon>
+            <v-menu left>
+                <v-btn flat icon slot='activator'>
+                    <v-icon>more_vert</v-icon>
                 </v-btn>
-                <span>{{showVariants ? 'Hide' : 'Show'}} colors</span>
-            </v-tooltip>
+                <v-list dense>
+                    <v-list-tile>
+                        <v-list-tile-title>Save theme</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-title>Reload theme</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+            <v-btn v-if='isMobile' flat @click='showVariants = !showVariants' icon>
+                <v-icon>menu</v-icon>
+            </v-btn>
         </v-toolbar>
-        <v-navigation-drawer right app v-model='showVariants' floating class="elevation-2 pb-0" :permanent='isMobile ? false : showVariants'>
+        <v-navigation-drawer right app v-model='showVariants' floating class="elevation-2 pb-0" :permanent='!isMobile'>
+            <v-toolbar class="elevation-1" color="transparent">
+                <v-toolbar-title>Color variants</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn class="elevation-3" small color="primary">export</v-btn>
+            </v-toolbar>
             <v-list two-line dense class="pa-0">
                 <variant-tile v-for='(hex, name) in theme.colors' :key='name' :hex='hex' :variant-name="name"></variant-tile>
                 <v-divider></v-divider>
@@ -27,7 +42,7 @@
                         </v-avatar>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>Dark Mode</v-list-tile-title>
+                        <v-list-tile-title>Dark Theme</v-list-tile-title>
                         <v-list-tile-sub-title>{{theme.dark ? 'On' : 'Off'}}</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -37,15 +52,17 @@
             <v-container class="ma-0 pa-0" fluid>
                 <v-layout row wrap align-center justify-center>
                     <v-flex xs12 sm10 md8 lg5 class="mx-1 elevation-24" :style='{height, "overflow-y": "auto"}'>
-                        <v-app :dark='theme.dark' id='preview' style='min-height: none'>
-                            <v-toolbar color="primary" dark extended tabs>
+                        <v-app :dark='theme.dark' id='preview'>
+                            <v-toolbar color="primary" extended prominent>
                                 <v-toolbar-side-icon></v-toolbar-side-icon>
                                 <v-toolbar-title>Test</v-toolbar-title>
-                                <v-tabs slot='extension' fixed-tabs color='transparent' slider-color='white'>
-                                    <v-tab v-for='i in 3' :key='i'>
-                                        Item {{i}}
-                                    </v-tab>
-                                </v-tabs>
+                                <v-spacer></v-spacer>
+                                <v-btn icon flat>
+                                    <v-icon>search</v-icon>
+                                </v-btn>
+                                <v-btn color="accent" fab bottom right absolute>
+                                    <v-icon>add</v-icon>
+                                </v-btn>
                             </v-toolbar>
                         </v-app>
                     </v-flex>
