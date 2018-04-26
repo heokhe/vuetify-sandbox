@@ -33,7 +33,7 @@ new Vue({
         return {
             titleTemplate: t => `${t ? t + ' — ' : ''}Vuetify Sandbox`,
             meta: [{
-                name: 'content-color',
+                name: 'theme-color',
                 content: _.$store.state.dark ? '#212121' : _.$vuetify.theme.primary
             }]
         }
