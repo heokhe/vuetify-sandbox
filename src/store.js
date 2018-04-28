@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        dark: false
+        dark: (new Date()).getHours() > 17
     },
     mutations: {
         toggleDark(state){
