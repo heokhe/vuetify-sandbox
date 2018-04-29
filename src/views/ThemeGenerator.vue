@@ -1,40 +1,16 @@
 <template>
     <div>
-        <v-toolbar app absolute ref='toolbar' class="elevation-1">
-            <v-btn flat icon to='/'>
-                <v-icon>arrow_back</v-icon>
-            </v-btn>
-            <v-toolbar-title>Theme generator</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-menu left>
-                <v-btn flat icon slot='activator'>
-                    <v-icon>more_vert</v-icon>
-                </v-btn>
-                <v-list dense>
-                    <v-list-tile>
-                        <v-list-tile-title>Save theme</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-title>Reload theme</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click='$store.commit("toggleDark")' color=''>
-                        <v-list-tile-title>Toggle Dark mode</v-list-tile-title>
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
-            <v-btn v-if='isMobile' flat @click='showVariants = !showVariants' icon>
-                <v-icon>menu</v-icon>
-            </v-btn>
-        </v-toolbar>
-        <v-navigation-drawer right app v-model='showVariants' floating class="elevation-2 pb-0" :permanent='!isMobile'>
-            <v-toolbar class="elevation-1" color="transparent">
-                <v-toolbar-title>Color variants</v-toolbar-title>
+        <v-navigation-drawer right app v-model='drawer' floating class="elevation-2 pb-0" :permanent='!isSmallDevice'>
+            <v-toolbar flat dense color="transparent">
+                <v-toolbar-title>Colors</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn flat small outline color='primary'>export</v-btn>
+                <v-btn depressed small color='primary'>
+                    <v-icon class="mr-1" small>content_copy</v-icon> export
+                </v-btn>
             </v-toolbar>
+            <v-divider></v-divider>
             <v-list two-line dense class="pa-0">
                 <variant-tile v-for='(hex, name) in theme.colors' :key='name' :hex='hex' :variant-name="name"></variant-tile>
-                <v-divider></v-divider>
                 <v-list-tile v-ripple avatar @click='toggleDark'>
                     <v-list-tile-avatar>
                         <v-avatar style='flex-shrink: 0' :size='32'>
@@ -49,37 +25,64 @@
             </v-list>
         </v-navigation-drawer>
         <v-content>
-            <v-container class="ma-0 pa-0" fluid>
+            <v-btn fab fixed top left small to='/'>
+                <v-icon>arrow_back</v-icon>
+            </v-btn>
+            <v-menu top right transition="fade-transition" :open-on-hover='!isTouch'>
+                <v-btn fab fixed bottom left slot='activator' flat small>
+                    <v-icon>more_vert</v-icon>
+                </v-btn>
+                <v-list dense>
+                    <v-list-tile @click='$store.commit("toggleDark")' ripple>
+                        <v-list-tile-title>Toggle dark mode</v-list-tile-title>
+                    </v-list-tile>
+                    <v-divider></v-divider>
+                    <v-list-tile>
+                        <v-list-tile-title>Save theme</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-title>Reload theme</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+            <v-btn fab fixed small top right color='secondary' v-if='isSmallDevice' @click='drawer = true' @keydown.esc.exact='drawer = false'>
+                <v-icon>menu</v-icon>
+            </v-btn>
+            <v-container class="pa-0 mt-3" fluid>
                 <v-layout row wrap align-center justify-center>
-                    <v-flex xs12 sm10 md8 lg5 class="mx-1 elevation-24" :style='{height, "overflow-y": "auto"}'>
+                    <v-flex xs12 sm10 md8 lg5 class="elevation-24 my-5 mx-3">
                         <v-app :dark='theme.dark' id='preview'>
                             <v-toolbar color="primary" extended prominent>
                                 <v-toolbar-side-icon></v-toolbar-side-icon>
-                                <v-toolbar-title>Test</v-toolbar-title>
+                                <v-toolbar-title>Preview</v-toolbar-title>
                                 <v-spacer></v-spacer>
                                 <v-btn icon flat>
                                     <v-icon>search</v-icon>
                                 </v-btn>
-                                <v-btn color="secondary" fab bottom right absolute>
+                                <v-btn @click='picker = true' color="accent" light fab bottom right absolute small>
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-toolbar>
+                            <div class="body-1 pa-3">
+                                <div class="headline mb-1">Theme Preview</div>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quidem unde cumque ipsam adipisci eos aperiam culpa, assumenda eveniet ut fuga, quasi perferendis consequatur? Error quibusdam perferendis architecto maiores earum non ipsam dolore necessitatibus, aspernatur consequatur excepturi natus itaque, voluptatem nostrum deleniti nobis. Id atque consequuntur quo excepturi, omnis aliquid harum accusantium eaque, at tempora quis ipsum laudantium dicta voluptas voluptate iste facilis, eveniet repellendus.
+                            </div>
                         </v-app>
                     </v-flex>
                 </v-layout>
             </v-container>
         </v-content>
+        <color-picker v-model='picker'></color-picker>
     </div>
 </template>
 
 <script>
 import VariantTile from '../components/VariantTile.vue';
+import ColorPicker from '../components/ColorPicker.vue';
 
 export default {
     name: 'theme-generator',
-    components: {
-        VariantTile
-    },
+    components: {VariantTile, ColorPicker},
     metaInfo(){
         return {
             title: 'Theme generator'
@@ -94,7 +97,8 @@ export default {
                 colors: this.$vuetify.theme,
                 dark: false
             },
-            showVariants: true,
+            picker: false,
+            drawer: false,
             mounted: false
         }
     },
@@ -104,8 +108,14 @@ export default {
         }
     },
     computed: {
-        isMobile(){
+        isSmallDevice(){
             return this.$vuetify.breakpoint.smAndDown
+        },
+        isTouch(){
+            return 'ontouchstart' in window;
+        },
+        isMobile(){
+            return this.isTouch && this.isSmallDevice
         },
         colors(){
             let {theme} = this;
@@ -113,26 +123,26 @@ export default {
             return theme
         },
         height(){
-            return this.mounted ? (!this.isMobile ? `calc(100vh - ${this.$refs.toolbar.computedHeight}px)` : 'auto') : 0
+            return this.mounted ? (!this.isSmallDevice ? `calc(100vh - ${this.$refs.toolbar.computedHeight}px)` : 'auto') : 0
         },
         sideBarStyle(){
             return this.mounted ? {
                 height: this.height,
                 'overflow-y': 'auto',
                 'overflow-x': 'visible',
-                order: this.isMobile ? '-1' : '1'
+                order: this.isSmallDevice ? '-1' : '1'
             } : {}
         },
         sideBarProps(){
-            let prop = this.isMobile ? 'xs12' : 'xs3';
+            let prop = this.isSmallDevice ? 'xs12' : 'xs3';
             return {
                 [prop]: true
             }
         },
         previewProps(){
             return {
-                xs12: this.isMobile ? true : !this.showVariants,
-                xs9: this.isMobile ? false : this.showVariants
+                xs12: this.isSmallDevice ? true : !this.drawer,
+                xs9: this.isSmallDevice ? false : this.drawer
             }
         }
     }
@@ -143,4 +153,7 @@ export default {
         width 30px
         height 30px
         display inline-block
+
+    #preview>.application--wrap
+        min-height calc(100vh - 160px)
 </style>
