@@ -5,16 +5,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        dark: (new Date()).getHours() > 17
+        dark: Boolean(localStorage.getItem('app--dark')) || false
     },
     mutations: {
         toggleDark(state){
             state.dark = !state.dark
+        },
+        theme(state, prop, color){
+            state.theme[prop] = color
         }
     },
-    getters: {
-        modeIcon(state){
-            return state.dark ? 'brightness_3' : 'wb_sunny'
+    actions: {
+        toggleDark({commit, state: {dark}}){
+            commit('toggleDark');
+            localStorage.setItem('app--dark', String(dark))
         }
     }
 })
