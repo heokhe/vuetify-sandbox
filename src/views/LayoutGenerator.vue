@@ -13,14 +13,14 @@
 					<v-layout row wrap>
 						<v-flex xs12 md6>
 							<v-subheader class="pl-0">Footer</v-subheader>
-							<v-checkbox label="Inset" :disabled="!drawer.permanent" v-model="footer.inset" hide-details></v-checkbox>
+							<layout-checkbox text="Inset" :disabled="!drawer.permanent" :model.sync="footer.inset"></layout-checkbox>
 							<v-subheader class="pl-0">Toolbar</v-subheader>
-							<v-checkbox label="Dense" v-model="toolbar.dense" hide-details></v-checkbox>
+							<layout-checkbox text="Dense" :model.sync="toolbar.dense"></layout-checkbox>
 						</v-flex>
 						<v-flex xs12 md6>
 							<v-subheader class="pl-0">Drawer</v-subheader>
-							<v-checkbox label="Permanent" v-model="drawer.permanent" hide-details></v-checkbox>
-							<v-checkbox label="Clipped" :disabled="!drawer.permanent" v-model="drawer.clipped" hide-details></v-checkbox>
+							<layout-checkbox text="Permanent" :model.sync="drawer.permanent"></layout-checkbox>
+							<layout-checkbox text="Clipped" :disabled="!drawer.permanent" :model.sync="drawer.clipped"></layout-checkbox>
 						</v-flex>
 					</v-layout>
 				</v-container>
@@ -35,7 +35,10 @@
 </template>
 
 <script>
+import LayoutCheckbox from '../components/LayoutCheckbox.vue'
+
 export default {
+	components: {LayoutCheckbox},
 	name: 'layout-generator',
 	data() {
 		return {

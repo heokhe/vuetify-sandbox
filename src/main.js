@@ -10,8 +10,6 @@ import "./plugin"
 import colors from 'vuetify/es5/util/colors'
 import App from './App.vue'
 
-Vue.config.productionTip = false
-
 Vue.use(Vuetify, {
     theme: {
         primary: colors.amber.darken1,
@@ -24,6 +22,8 @@ Vue.use(Vuetify, {
 })
 
 Vue.use(VueMeta)
+
+Vue.config.productionTip = false
 
 new Vue({
     router,
