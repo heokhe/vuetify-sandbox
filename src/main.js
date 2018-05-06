@@ -1,29 +1,22 @@
 import Vue from 'vue'
-import VueMeta from 'vue-meta'
-import router from './router'
-import store from './store'
-import './registerServiceWorker'
+
 import Vuetify from 'vuetify'
+import theme from './theme'
 import 'vuetify/dist/vuetify.min.css'
 import './styles/index.styl'
-import "./plugin"
-import colors from 'vuetify/es5/util/colors'
-import App from './App.vue'
-
 Vue.use(Vuetify, {
-    theme: {
-        primary: colors.amber.darken1,
-        secondary: colors.blue.accent3,
-        accent: colors.lightBlue.accent1
-    },
+    theme,
     options: {
         minifyTheme: t => t.replace(/\s/g, '')
     }
 })
 
+import VueMeta from 'vue-meta'
 Vue.use(VueMeta)
 
-Vue.config.productionTip = false
+import router from './router'
+import store from './store'
+import App from './App.vue'
 
 new Vue({
     router,
@@ -40,3 +33,7 @@ new Vue({
         }
     }
 }).$mount('#app')
+
+Vue.config.productionTip = false
+
+import './registerServiceWorker'

@@ -39,7 +39,7 @@
                     <v-list-tile-title>GitHub</v-list-tile-title>
                 </v-list-tile>
             </v-list>
-            <v-footer class="pr-3 pl-1 caption justify-end" fixed>
+            <v-footer class="pl-3 pr-1 caption" fixed>
                 Copyright &nbsp;
                 <a href="https://hkh12.github.io" target="_blank" class="secondary--text">@hkh12</a>
                 &nbsp;&mdash; {{(new Date()).getFullYear()}}
@@ -76,7 +76,8 @@
                                 Every change you make to themes and layouts, gets saved automatically in local storage and will be available for the next time that you come.
                             </feature-card>
                             <feature-card icon='widgets' title-text="PWA">
-                                Thanks to Vuetify semantic components, This app has a simple and light UI that boosts your productivity.
+                                Vuetify sandbox is a PWA, so it can work offline or appear on your homescreen.
+                                it has a clean, simple and easy-to-work layout built with Vuetify.
                             </feature-card>
                         </v-layout>
                     </v-container>
