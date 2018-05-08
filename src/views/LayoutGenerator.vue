@@ -5,7 +5,7 @@
 			<v-toolbar-title>Layout</v-toolbar-title>
 			<v-spacer></v-spacer>
 		</v-toolbar>
-		<v-navigation-drawer app v-model='showDrawer' :permanent='drawer.permanent' class="elevation-0" :clipped="drawer.clipped">
+		<v-navigation-drawer app v-model='showDrawer' :permanent='drawer.permanent' class="elevation-0" :clipped="drawer.clipped" :floating="drawer.floating">
 		</v-navigation-drawer>
 		<v-content>
 			<v-card class="ma-3 pb-2 px-3">
@@ -21,6 +21,7 @@
 							<v-subheader class="pl-0">Drawer</v-subheader>
 							<layout-checkbox text="Permanent" :model.sync="drawer.permanent"></layout-checkbox>
 							<layout-checkbox text="Clipped" :disabled="!drawer.permanent" :model.sync="drawer.clipped"></layout-checkbox>
+							<layout-checkbox text="Floating" :model.sync="drawer.floating"></layout-checkbox>
 						</v-flex>
 					</v-layout>
 				</v-container>
@@ -48,7 +49,8 @@ export default {
 			drawer: {
 				clipped: false,
 				permanent: true,
-				overlay: true
+				overlay: true,
+				floating: false
 			},
 			toolbar: {
 				dense: false,

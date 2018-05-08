@@ -1,75 +1,98 @@
 <template>
     <div v-if='mounted'>
-        <v-navigation-drawer right app v-model='drawer' floating class="elevation-5 pb-0" :permanent='!isSmallDevice'>
+        <v-navigation-drawer right app v-model='drawer' floating class="elevation-5 pb-0" :permanent='!isMobile'>
             <v-toolbar flat dense color="transparent">
                 <v-toolbar-title>Colors</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn depressed small color='primary'>
+                <v-btn small depressed @click.native='exportDialog = true; drawer = isMobile ? false : drawer'>
                     <v-icon class="mr-1" small>content_copy</v-icon> export
                 </v-btn>
             </v-toolbar>
             <v-divider></v-divider>
-            <v-list two-line dense class="pa-0" style='height: 55%; overflow-y: auto'>
-                <variant-tile v-for='(hex, name) in theme' @click.native='picker.open = true' :key='name' :hex='hex' :variant-name="name"></variant-tile>
+            <v-list two-line dense class="pa-0">
+                <variant-tile v-for='(hex, name) in theme' @click.native='pick(name)' :key='name' :hex='hex' :variant-name="name"></variant-tile>
             </v-list>
-            <v-divider></v-divider>
-            <div style='height: calc(45% - 50px); overflow-y: auto'>
-            </div>
         </v-navigation-drawer>
-        <v-content>
-            <v-btn fab fixed top left small to='/'>
+
+        <v-toolbar flat dense app>
+                <!-- <v-btn icon flat>
+                    <v-icon>keyboard_arrow_left</v-icon>
+                </v-btn>
+                1/5
+                <v-btn icon flat>
+                    <v-icon>keyboard_arrow_right</v-icon>
+                </v-btn> -->
+            <v-btn icon flat to='/'>
                 <v-icon>arrow_back</v-icon>
             </v-btn>
-            <v-menu top right transition="fade-transition" :open-on-hover='!isTouch'>
-                <v-btn fab fixed bottom left slot='activator' flat small>
+            <v-spacer></v-spacer>
+            <v-menu bottom left :open-on-hover='!isTouch'>
+                <v-btn slot='activator' flat icon>
                     <v-icon>more_vert</v-icon>
                 </v-btn>
                 <v-list dense>
                     <v-list-tile @click='$store.dispatch("toggleDark")' ripple>
                         <v-list-tile-title>Toggle dark mode</v-list-tile-title>
                     </v-list-tile>
-                    <v-divider></v-divider>
-                    <v-list-tile>
-                        <v-list-tile-title>Save theme</v-list-tile-title>
-                    </v-list-tile>
                     <v-list-tile>
                         <v-list-tile-title>Reload theme</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>
-            <v-btn fab fixed small top right color='secondary' v-if='isSmallDevice' @click='drawer = true' @keydown.esc.exact='drawer = false'>
+            <v-btn v-if='isMobile' @click='drawer = true' icon flat>
                 <v-icon>menu</v-icon>
             </v-btn>
-            <v-container class="pa-0 mt-3" fluid>
-                <v-layout row wrap align-center justify-center>
-                    <v-flex xs12 sm10 md8 lg5 class="elevation-24 my-5 mx-3">
-                        <v-app :dark='theme.dark' id='preview'>
+        </v-toolbar>
+
+        <v-content :class="`grey ${$store.state.dark ? 'darken-4' : 'lighten-4'}`" style="height:100vh" class="d-flex">
+            <v-container fill-height>
+                <v-layout row align-center justify-center>
+                    <v-flex xs12 md6 class="elevation-10" :class="`my-${isMobile ? 0 : 4}`">            
+                        <v-app id="preview" :dark='$store.state.dark'>
                             <v-toolbar color="primary" extended prominent>
-                                <v-toolbar-title>Preview</v-toolbar-title>
                                 <v-spacer></v-spacer>
-                                <v-btn icon flat>
-                                    <v-icon>refresh</v-icon>
-                                </v-btn>
-                                <v-btn icon flat>
-                                    <v-icon>search</v-icon>
-                                </v-btn>
                                 <v-btn icon flat>
                                     <v-icon>more_vert</v-icon>
                                 </v-btn>
-                                <v-btn @click='picker = true' color="accent" light fab bottom right absolute small>
-                                    <v-icon>add</v-icon>
+                                <div slot="extension">
+                                    <div class="pl-4 display-1">Preview</div>
+                                </div>
+                                <v-btn fab color="secondary" bottom right small absolute>
+                                    <v-icon>edit</v-icon>
                                 </v-btn>
                             </v-toolbar>
-                            <div class="body-1 pa-3">
-                                <div class="headline mb-1">Theme Preview</div>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quidem unde cumque ipsam adipisci eos aperiam culpa, assumenda eveniet ut fuga, quasi perferendis consequatur? Error quibusdam perferendis architecto maiores earum non ipsam dolore necessitatibus, aspernatur consequatur excepturi natus itaque, voluptatem nostrum deleniti nobis. Id atque consequuntur quo excepturi, omnis aliquid harum accusantium eaque, at tempora quis ipsum laudantium dicta voluptas voluptate iste facilis, eveniet repellendus.
+                            <div class="pa-3">
+                                <div class="headline my-1">Theme Preview</div>
+                                <p class="body-1 pb-0 mb-0">
+                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis praesentium maxime ut enim suscipit aperiam incidunt magni soluta vitae, impedit explicabo excepturi deleniti esse quae quisquam velit? Cum facere asperiores recusandae, minima laborum facilis molestias! Repellat id consectetur totam vero ea velit itaque nisi esse omnis exercitationem? Culpa aliquam inventore nobis error, magnam consequuntur quisquam. Temporibus mollitia corporis pariatur rem natus nisi accusantium. Consequuntur eveniet eligendi sunt nisi fugit accusamus! Perferendis, ex. Quasi, suscipit modi.
+                                </p>
                             </div>
                         </v-app>
                     </v-flex>
                 </v-layout>
             </v-container>
         </v-content>
-        <!-- <color-picker :open.sync='picker.open'></color-picker> -->
+
+        <color-picker :open.sync='picker.open' @input='setProp($event)' :prop-name="picker.activeProp" :color='picker.color'></color-picker>
+
+        <v-dialog v-model="exportDialog" max-width="420px" transition="slide-y-transition" @keydown.esc.exact="exportDialog = false">
+            <v-card>
+                <v-card-text>
+                    <pre class="d-block mt-2 export-code-block pa-2" :class='`grey ${$store.state.dark ? "darken" : "lighten"}-4`' ref='code'>
+                        Vue.<span class="blue--text">use</span>(Vuetify, {
+                            <div v-for='(color, name, i) in theme' :key='i'>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="red--text">{{name}}</span>: <span class="orange--text">"{{color.toLowerCase()}}"</span><span v-if='i !== 6'>,</span>
+                            </div>
+                        })
+                    </pre>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions class="justify-end">
+                    <v-btn flat color="blue accent-2" @click='exportDialog = false'>close</v-btn>
+                    <v-btn flat color='blue accent-2' @click="copy">copy</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -78,45 +101,59 @@ import VariantTile from "../components/VariantTile.vue";
 import ColorPicker from "../components/ColorPicker.vue";
 
 export default {
-  name: "theme-generator",
-  components: { VariantTile, ColorPicker },
-  metaInfo() {
-    return {
-      title: "Theme generator"
-    };
-  },
-  mounted() {
-    this.mounted = true;
+    components: { VariantTile, ColorPicker },
+    name: "theme-generator",
+    data() {
+        return {
+            theme: null,
+            picker: {
+                open: false,
+                activeProp: '',
+            },
+            drawer: false,
+            mounted: false,
+            exportDialog: false
+        };
+    },
+    metaInfo() {
+        return {
+            title: "Theme generator"
+        };
+    },
+    mounted() {
+        this.mounted = true;
+        this.theme = (({primary, accent, secondary}) => ({primary, secondary, accent}))(this.$vuetify.theme)
+    },
+    methods: {
+        pick(activeProp){
+            this.picker = {
+                open: true,
+                activeProp
+            }
+            if (this.isMobile) this.drawer = false
+        },
+        copy(){
+            let code = this.$refs.code;
 
-    this.theme = this.$vuetify.theme
-  },
-  data() {
-    return {
-      theme: null,
-      picker: {
-        open: false,
-        activeProp: "primary"
-      },
-      drawer: false,
-      mounted: false
-    };
-  },
-  methods: {
-    toggleDark() {
-      this.theme.dark = !this.theme.dark;
-    }
-  },
-  computed: {
-    isSmallDevice() {
-      return this.$vuetify.breakpoint.smAndDown;
+            let range = document.createRange();
+            range.selectNode(code);
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            this.exportDialog = false
+        },
+        setProp({color, propName}){
+            this.theme[propName] = color
+            this.$vuetify.theme[propName] = color
+        }
     },
-    isTouch() {
-      return "ontouchstart" in window;
-    },
-    isMobile() {
-      return this.isTouch && this.isSmallDevice;
+    computed: {
+        isMobile() {
+            return this.$vuetify.breakpoint.smAndDown;
+        },
+        isTouch() {
+            return "ontouchstart" in window;
+        }
     }
-  }
 };
 </script>
 <style lang='stylus'>
@@ -127,6 +164,14 @@ export default {
 
 
 #preview>.application--wrap 
-    min-height calc(100vh - 160px);
+    min-height auto
+    height calc(100vh - 120px);
+    overflow auto
+    > *
+        flex-shrink 0 !important
 
+.export-code-block
+    line-height 1
+    white-space pre-line
+    border-radius 2.5px
 </style>

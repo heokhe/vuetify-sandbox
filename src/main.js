@@ -4,6 +4,7 @@ import Vuetify from 'vuetify'
 import theme from './theme'
 import 'vuetify/dist/vuetify.min.css'
 import './styles/index.styl'
+
 Vue.use(Vuetify, {
     theme,
     options: {
@@ -18,7 +19,7 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 
-new Vue({
+const vm = new Vue({
     router,
     store,
     render: h => h(App),
@@ -33,6 +34,15 @@ new Vue({
         }
     }
 }).$mount('#app')
+
+router.beforeEach((to, from, next) => {
+    if (from.path === '/theme') {
+        vm.$vuetify.theme.primary = theme.primary
+        vm.$vuetify.theme.accent = theme.accent
+        vm.$vuetify.theme.secondary = theme.secondary
+    }
+    next()
+})
 
 Vue.config.productionTip = false
 
