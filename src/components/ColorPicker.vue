@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="this.open" :fullscreen="mob" max-width="720px" transition="slide-y-reverse-transition" lazy @keydown.esc.exact="close">
+	<v-dialog v-model="this.open" :fullscreen="mob" max-width="720px" transition="slide-y-reverse-transition" @keydown.esc.exact="close">
 		<v-card>
 			<v-card-title class="pt-2 mb-0">
 				<v-avatar :size="32" class="mr-3 elevation-1" :style='{"background-color": color}'></v-avatar>
@@ -18,7 +18,7 @@
 					<div class="shades" :class='{active: !!activeGroup, accents: showAccents}'>
 						<div class="shade" @click='finalizeColor(sh)' v-ripple v-for='sh in (showAccents ? accentShades : shades)' :key='sh' :class="activeGroup + sh"></div>
 						<div class="details-bar d-flex align-center justify-space-between px-2">
-							<v-btn flat icon class="ma-0" @click.native="activeGroup = null" dark>
+							<v-btn flat icon class="ma-0" @click.native="activeGroup = ''; showAccents = false" dark>
 								<v-icon>arrow_back</v-icon>
 							</v-btn>
 							<v-btn class="ma-0" flat small dark @click.native='showAccents = !showAccents'>{{showAccents ? "primary" : "accent"}} colors</v-btn>
@@ -37,7 +37,7 @@ export default {
 	name: 'color-picker',
 	data() {
 		return {
-			activeGroup: null,
+			activeGroup: '',
 			showAccents: false
 		}
 	},
@@ -76,7 +76,7 @@ export default {
 	methods: {
 		close(){
 			this.$emit('update:open', false)
-			this.activeGroup = null
+			this.activeGroup = ''
 			this.showAccents = false
 		},
 		finalizeColor(shade){
