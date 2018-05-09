@@ -23,16 +23,13 @@ const vm = new Vue({
     router,
     store,
     render: h => h(App),
-    metaInfo: function() {
-        let _ = this;
-        return {
-            titleTemplate: t => `${t ? t + ' — ' : ''}Vuetify Sandbox`,
-            meta: [{
-                name: 'theme-color',
-                content: _.$store.state.dark ? '#212121' : _.$vuetify.theme.primary
-            }]
-        }
-    }
+    metaInfo: () => ({
+        titleTemplate: t => `${t ? t + ' — ' : ''}Vuetify Sandbox`,
+        meta: [{
+            name: 'theme-color',
+            content: store.state.dark ? '#212121' : theme.primary
+        }]
+    })
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {

@@ -1,33 +1,73 @@
 <template>
-	<div>
+	<div ref='root'>
 		<v-toolbar app fixed :clipped-left="drawer.clipped" flat :dense='toolbar.dense'>
 			<v-toolbar-side-icon @click.native="showDrawer = !showDrawer"></v-toolbar-side-icon>
 			<v-toolbar-title>Layout</v-toolbar-title>
 			<v-spacer></v-spacer>
+			<v-btn flat to='/' small>
+				Back to home
+			</v-btn>
 		</v-toolbar>
-		<v-navigation-drawer app v-model='showDrawer' :permanent='drawer.permanent' class="elevation-0" :clipped="drawer.clipped" :floating="drawer.floating">
+		<v-navigation-drawer app :temporary='!drawer.permanent' v-model='showDrawer' :clipped="drawer.clipped" :permanent="drawer.permanent" :floating="drawer.floating" ref='drawer'>
+		  
 		</v-navigation-drawer>
 		<v-content>
-			<v-card class="ma-3 pb-2 px-3">
-				<v-container fluid fill-height>
-					<v-layout row wrap>
-						<v-flex xs12 md6>
-							<v-subheader class="pl-0">Footer</v-subheader>
-							<layout-checkbox text="Inset" :disabled="!drawer.permanent" :model.sync="footer.inset"></layout-checkbox>
-							<v-subheader class="pl-0">Toolbar</v-subheader>
-							<layout-checkbox text="Dense" :model.sync="toolbar.dense"></layout-checkbox>
-						</v-flex>
-						<v-flex xs12 md6>
-							<v-subheader class="pl-0">Drawer</v-subheader>
-							<layout-checkbox text="Permanent" :model.sync="drawer.permanent"></layout-checkbox>
-							<layout-checkbox text="Clipped" :disabled="!drawer.permanent" :model.sync="drawer.clipped"></layout-checkbox>
-							<layout-checkbox text="Floating" :model.sync="drawer.floating"></layout-checkbox>
-						</v-flex>
-					</v-layout>
-				</v-container>
+			<v-card class="ma-3 py-2">
+				<v-list subheader two-line>
+					<v-subheader>Navigation Drawer</v-subheader>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-checkbox v-model="drawer.permanent"></v-checkbox>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Always visible (permanent)</v-list-tile-title>
+						  	<v-list-tile-sub-title>Make drawer visibile on any screen</v-list-tile-sub-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile :disabled='!drawer.permanent'>
+						<v-list-tile-action>
+							<v-checkbox v-model="drawer.clipped"></v-checkbox>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Clipped</v-list-tile-title>
+						  	<v-list-tile-sub-title>Make toolbar come over drawer (has no effect on temporary drawers)</v-list-tile-sub-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-checkbox v-model="drawer.floating"></v-checkbox>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Floating drawer</v-list-tile-title>
+						  	<v-list-tile-sub-title>Hide drawer border</v-list-tile-sub-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-divider></v-divider>
+					<v-subheader>Toolbar</v-subheader>
+					<v-list-tile>
+						<v-list-tile-action>
+							<v-checkbox v-model="toolbar.dense"></v-checkbox>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Dense toolbar</v-list-tile-title>
+							<v-list-tile-sub-title>Reduce toolbar height</v-list-tile-sub-title>
+						</v-list-tile-content>
+					</v-list-tile>
+					<v-divider></v-divider>
+					<v-subheader>Footer</v-subheader>
+					<v-list-tile :disabled="!drawer.permanent">
+						<v-list-tile-action>
+							<v-checkbox v-model="footer.inset"></v-checkbox>
+						</v-list-tile-action>
+						<v-list-tile-content>
+							<v-list-tile-title>Inset footer</v-list-tile-title>
+							<!-- <v-list-tile-sub-title>Reduce toolbar height</v-list-tile-sub-title> -->
+						</v-list-tile-content>
+					</v-list-tile>
+				</v-list>
 			</v-card>
 		</v-content>
-		<v-footer fixed class="caption" app :inset='footer.inset'>
+		<v-footer class="caption" app :inset='footer.inset' ref='footer'>
 			<div class="px-2">
 				Copyright &copy; &mdash; Your company
 			</div>
@@ -36,31 +76,24 @@
 </template>
 
 <script>
-import LayoutCheckbox from '../components/LayoutCheckbox.vue'
 
 export default {
-	components: {LayoutCheckbox},
 	name: 'layout-generator',
 	data() {
 		return {
 			footer: {
-				inset: true
+				inset: true,
+				appendToDrawer: false
 			},
 			drawer: {
 				clipped: false,
-				permanent: true,
-				overlay: true,
-				floating: false
+				floating: false,
+				permanent: false
 			},
 			toolbar: {
 				dense: false,
 			},
 			showDrawer: false
-		}
-	},
-	watch: {
-		'drawer.permanent'(e){
-			if (!e) this.drawer.clipped = false
 		}
 	}
 }
