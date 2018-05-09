@@ -49,15 +49,15 @@
                 <v-layout row align-center justify-center>
                     <v-flex xs12 md6 class="elevation-10" :class="`my-${isMobile ? 0 : 4}`">            
                         <v-app id="preview" :dark='$store.state.dark'>
-                            <v-toolbar color="primary" extended prominent>
+                            <v-toolbar color="primary" extended prominent :light="isLight.primary" :dark='!isLight.primary'>
                                 <v-spacer></v-spacer>
-                                <v-btn icon flat>
+                                <v-btn icon flat :light="isLight.primary" :dark='!isLight.primary'>
                                     <v-icon>more_vert</v-icon>
                                 </v-btn>
                                 <div slot="extension">
                                     <div class="pl-4 display-1">Preview</div>
                                 </div>
-                                <v-btn fab color="secondary" bottom right small absolute>
+                                <v-btn fab color="secondary" bottom right small absolute :light='isLight.secondary'>
                                     <v-icon>edit</v-icon>
                                 </v-btn>
                             </v-toolbar>
@@ -81,7 +81,7 @@
                     <pre class="d-block mt-2 export-code-block pa-2" :class='`grey ${$store.state.dark ? "darken" : "lighten"}-4`' ref='code'>
                         Vue.<span class="blue--text">use</span>(Vuetify, {
                             <div v-for='(color, name, i) in theme' :key='i'>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="red--text">{{name}}</span>: <span class="orange--text">"{{color.toLowerCase()}}"</span><span v-if='i !== 6'>,</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="red--text">{{name}}</span>: <span class="orange--text">"{{color.toLowerCase()}}"</span><span v-if='i !== 2'>,</span>
                             </div>
                         })
                     </pre>
@@ -125,7 +125,7 @@ export default {
         this.mounted = true;
 
         this.theme = (({primary, accent, secondary}) => ({primary, secondary, accent}))(this.$vuetify.theme);
-        
+
         // we cannot directly construct theme from storage; so we should do it for each theme property after the main construction
         if (localStorage.getItem('theme--obj')){
             let t = JSON.parse(localStorage.getItem('theme--obj'));
