@@ -1,5 +1,5 @@
 <template>
-    <div v-if='mounted'>
+    <div v-cloak>
         <v-navigation-drawer right app v-model='drawer' floating class="elevation-5 pb-0" :permanent='!isMobile'>
             <v-toolbar flat dense color="transparent">
                 <v-toolbar-title>Colors</v-toolbar-title>
@@ -99,6 +99,7 @@
 <script>
 import VariantTile from "../components/VariantTile.vue";
 import ColorPicker from "../components/ColorPicker.vue";
+import {hex} from 'color-convert';
 
 export default {
     components: { VariantTile, ColorPicker },
@@ -122,7 +123,16 @@ export default {
     },
     mounted() {
         this.mounted = true;
-        this.theme = (({primary, accent, secondary}) => ({primary, secondary, accent}))(this.$vuetify.theme)
+
+        this.theme = (({primary, accent, secondary}) => ({primary, secondary, accent}))(this.$vuetify.theme);
+        
+        // we cannot directly construct theme from storage; so we should do it for each theme property after the main construction
+        if (localStorage.getItem('theme--obj')){
+            let t = JSON.parse(localStorage.getItem('theme--obj'));
+            this.theme.primary = t.primary
+            this.theme.accent = t.accent
+            this.theme.secondary = t.secondary
+        }
     },
     methods: {
         pick(activeProp){
@@ -135,15 +145,22 @@ export default {
         copy(){
             let code = this.$refs.code;
 
-            let range = document.createRange();
-            range.selectNode(code);
-            window.getSelection().addRange(range);
-            document.execCommand("copy");
-            this.exportDialog = false
+            if (document.selection) { 
+                let range = document.body.createTextRange();
+                range.moveToElementText(code);
+                range.select().createTextRange();
+                document.execCommand("copy"); 
+            } else {
+                let range = document.createRange();
+                range.selectNode(code);
+                window.getSelection().addRange(range);
+                document.execCommand("copy");
+                this.exportDialog = false
+            }
         },
         setProp({color, propName}){
             this.theme[propName] = color
-            this.$vuetify.theme[propName] = color
+            // this.$vuetify.theme[propName] = color
         }
     },
     computed: {
@@ -152,7 +169,28 @@ export default {
         },
         isTouch() {
             return "ontouchstart" in window;
+        },
+        isLight(){
+            const get = n => hex.hsl(this.theme[n])[2] > 54
+
+            return {
+                primary: get('primary'),
+                secondary: get('secondary'),
+                accent: get('accent')
+            }
         }
+    },
+    beforeMount(){
+        this.$watch('theme', (e) => {
+            this.$vuetify.theme.primary = e.primary
+            this.$vuetify.theme.secondary = e.secondary
+            this.$vuetify.theme.accent = e.accent
+
+            localStorage.setItem('theme--obj', JSON.stringify(e))
+        }, {
+            deep: true,
+            immediate: false
+        })
     }
 };
 </script>

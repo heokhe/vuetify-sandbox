@@ -1,6 +1,6 @@
 <template>
 	<v-dialog v-model="this.open" :fullscreen="mob" max-width="720px" transition="slide-y-reverse-transition" @keydown.esc.exact="close">
-		<v-card>
+		<v-card class='d-flex row picker--card'>
 			<v-card-title class="pt-2 mb-0">
 				<v-avatar :size="32" class="mr-3 elevation-1" :style='{"background-color": color}'></v-avatar>
 				<div class="subheading">
@@ -10,22 +10,24 @@
 					<div class="caption grey--text">{{color}}</div>
 				</div>
 				<v-spacer></v-spacer>
-				<v-btn icon flat color='grey' class="mr-0" @click='close'><v-icon>close</v-icon></v-btn>
+				<v-btn icon flat class="mr-0" @click='close'><v-icon>close</v-icon></v-btn>
 			</v-card-title>
-			<div class="pa-3">
-				<div class="color-groups elevation-5">
-					<div class="color-group" v-ripple v-for="cg in colorGroups" @click='activeGroup = cg' :key='cg' :class='cg'></div>
-					<div class="shades" :class='{active: !!activeGroup, accents: showAccents}'>
-						<div class="shade" @click='finalizeColor(sh)' v-ripple v-for='sh in (showAccents ? accentShades : shades)' :key='sh' :class="activeGroup + sh"></div>
-						<div class="details-bar d-flex align-center justify-space-between px-2">
-							<v-btn flat icon class="ma-0" @click.native="activeGroup = ''; showAccents = false" dark>
-								<v-icon>arrow_back</v-icon>
-							</v-btn>
-							<v-btn class="ma-0" flat small dark @click.native='showAccents = !showAccents'>{{showAccents ? "primary" : "accent"}} colors</v-btn>
+			<v-container fill-height align-center justify-center>
+				<div class="pa-3 ma-2">
+					<div class="color-groups elevation-5">
+						<div class="color-group" v-ripple v-for="cg in colorGroups" @click='activeGroup = cg' :key='cg' :class='cg'></div>
+						<div class="shades" :class='{active: !!activeGroup, accents: showAccents}'>
+							<div class="shade" @click='finalizeColor(sh)' v-ripple v-for='sh in (showAccents ? accentShades : shades)' :key='sh' :class="activeGroup + sh"></div>
+							<div class="details-bar d-flex align-center justify-space-between px-2">
+								<v-btn flat icon class="ma-0" @click.native="activeGroup = ''; showAccents = false" dark>
+									<v-icon>arrow_back</v-icon>
+								</v-btn>
+								<v-btn class="ma-0" flat small dark @click.native='showAccents = !showAccents'>{{showAccents ? "primary" : "accent"}} colors</v-btn>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</v-container>
 		</v-card>
 	</v-dialog>
 </template>
@@ -35,7 +37,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
 	name: 'color-picker',
-	data() {
+	data() {	
 		return {
 			activeGroup: '',
 			showAccents: false
@@ -138,6 +140,7 @@ export default {
 		position absolute
 		bottom 0
 		left 0
+		flex-direction row
 		right 0
 		padding-bottom 4px
 		pointer-events none
@@ -147,4 +150,10 @@ export default {
 		> .shade
 			width 50%
 			height 50%
+	
+.picker--card
+	flex-direction column
+	> *
+		flex-shrink 0 !important
+		flex-grow 0 !important
 </style>
