@@ -6,7 +6,7 @@ import 'vuetify/dist/vuetify.min.css'
 import './styles/index.styl'
 
 Vue.use(Vuetify, {
-    theme,
+    theme: JSON.parse(JSON.stringify(theme)),
     options: {
         minifyTheme: t => t.replace(/\s/g, '')
     }

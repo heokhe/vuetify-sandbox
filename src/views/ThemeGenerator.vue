@@ -34,7 +34,7 @@
                     <v-list-tile @click='$store.dispatch("toggleDark")' ripple>
                         <v-list-tile-title>Toggle dark mode</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile>
+                    <v-list-tile @click="confirmReload = true">
                         <v-list-tile-title>Reload theme</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -93,6 +93,25 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-bottom-sheet inset v-model="confirmReload">
+            <v-card>
+                <v-list>
+                    <v-list-tile @click='reload'>
+                        <v-list-tile-avatar>
+                            <v-icon color="amber darken-1">refresh</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-title>Reload theme</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click='confirmReload = false'>
+                        <v-list-tile-avatar>
+                            <v-icon color="grey">close</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-title>Cancel</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-card>
+        </v-bottom-sheet>
     </div>
 </template>
 
@@ -100,6 +119,7 @@
 import VariantTile from "../components/VariantTile.vue";
 import ColorPicker from "../components/ColorPicker.vue";
 import {hex} from 'color-convert';
+import initialTheme from '../theme';
 
 export default {
     components: { VariantTile, ColorPicker },
@@ -113,7 +133,8 @@ export default {
             },
             drawer: false,
             mounted: false,
-            exportDialog: false
+            exportDialog: false,
+            confirmReload: false
         };
     },
     metaInfo() {
@@ -160,7 +181,12 @@ export default {
         },
         setProp({color, propName}){
             this.theme[propName] = color
-            // this.$vuetify.theme[propName] = color
+        },
+        reload(){
+            this.theme = JSON.parse(JSON.stringify(initialTheme))
+            localStorage.removeItem('theme--obj')
+            this.confirmReload = false
+            this.$forceUpdate()
         }
     },
     computed: {
