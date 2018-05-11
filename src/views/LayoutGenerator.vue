@@ -100,8 +100,13 @@ export default {
 		this.l = JSON.parse(localStorage.getItem('layout--obj')) || this.l
 		this.$watch('l', (e) => {
 			localStorage.setItem('layout--obj', JSON.stringify(e))
+
+			if (!e.drawer.permanent){
+				e.drawer.clipped = false
+			}
 		}, {
-			deep: true
+			deep: true,
+			immediate: true
 		})
 	}
 }
