@@ -83,10 +83,47 @@
                     </v-container>
                 </v-tab-item>
                 <v-tab-item class="pa-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident placeat, nesciunt reiciendis facere totam non voluptatem nam praesentium tempore eum quia ad quae repellendus enim temporibus eaque dolorum perspiciatis cumque? Soluta omnis doloremque at rem.
+                    <div v-once>
+                        <p class="subheading mb-1">
+                            <b>
+                                Theme tool is a powerful tool with a minimalist design to help you generate themes, view and export them.
+                            </b>
+                        </p>
+                        <v-divider class="my-2 mx-1"></v-divider>
+                        <div class="headline my-1">
+                            Sidebar
+                        </div>
+                        <p class="body-1">
+                            Colors used in theme are listed in the right sidebar. If you want to change them, just click on them. Color picker will be opened <br>
+                            And even if you want to view the code, click the <b>EXPORT</b> button.
+                        </p>
+                        <div class="headline my-1">
+                            Color picker
+                        </div>
+                        <p class="body-1">
+                            Once opened, a wide variety of <a href="https://material.io/design/color/the-color-system.html" target="_blank">Material design colors</a> is showed to you. click on a color group (colored squares). then, select a shade of that color and done!
+                        </p>
+                        <div class="headline my-1">
+                            Preview Section
+                        </div>
+                        <p class="body-1">
+                            The preview is available on the left side. Every change you make to the colors, will be reflected into it. <br>
+                            <i>There's no action belonged to this section; it just provides a visual example for you.</i>
+                        </p>
+                    </div>
                 </v-tab-item>
                 <v-tab-item class="pa-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad dignissimos placeat ex delectus aut tempora quia voluptate vitae perspiciatis molestiae. Praesentium architecto labore dolor vel sit quia optio natus magni, commodi nisi reiciendis laudantium, cupiditate ratione ullam reprehenderit quos, ducimus ut adipisci laboriosam rem. Asperiores ullam earum accusamus tempora, repellat dolores! Est.
+                    <p class="subheading mb-1">
+                        <b>
+                            Layout tool provides an easy-to-work-with workspace to play out with Vuetify layout feauters.
+                        </b>
+                        <br>
+                        There are settings for each key component. Combine them to make something great!
+                    </p>
+                    <v-divider class="my-3 mx-1"></v-divider>
+                    <div class="caption grey--text">
+                        There's no built-in exportion tool yet. We're working on this, be patient!
+                    </div>
                 </v-tab-item>
             </v-tabs>
         </v-content>
@@ -119,28 +156,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog> 
-        <!-- <v-dialog v-model="wikiDialogOpen" :fullscreen="isMobile" max-width="640px" transition="slide-y-reverse-transition" scrollable>
-            <v-card :class="{'d-flex': !wikiLoaded}">
-                <v-container fluid v-if='!wikiLoaded' fill-height="">
-                    <v-layout align-center justify-center>
-                        <v-flex xs12 text-xs-center class="py-5">
-                            <v-progress-circular indeterminate :size='72' :width="6" :color="dark ? 'accent' : 'secondary'"></v-progress-circular>
-                            <div class="title mt-3">Fetching data from GitHub...</div>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-                <template v-else>
-                    <v-card-title class="headline">Wiki</v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-text>
-                    </v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions class="justify-end">
-                        <v-btn color="secondary" @click='wikiDialogOpen = false' flat>close</v-btn>
-                    </v-card-actions>
-                </template>
-            </v-card>
-        </v-dialog> -->
     </div>
 </template>
 <script>
