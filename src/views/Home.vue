@@ -120,10 +120,6 @@
                         <br>
                         There are settings for each key component. Combine them to make something great!
                     </p>
-                    <v-divider class="my-3 mx-1"></v-divider>
-                    <div class="caption grey--text">
-                        There's no built-in exportion tool yet. We're working on this, be patient!
-                    </div>
                 </v-tab-item>
             </v-tabs>
         </v-content>
